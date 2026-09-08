@@ -7,6 +7,8 @@ Type=simple
 WorkingDirectory=/var/www/d-art/agent_system/backend
 Environment=NODE_ENV=production
 EnvironmentFile=/var/www/d-art/agent_system/backend/.env
+# Сервис работает от www-data — нужен Node 20+ в системном пути (/usr/bin или /usr/local/bin).
+# Нельзя указывать /root/.nvm/... — systemd вернёт 203/EXEC (нет доступа к /root).
 ExecStart=/usr/bin/node src/index.js
 Restart=on-failure
 RestartSec=5

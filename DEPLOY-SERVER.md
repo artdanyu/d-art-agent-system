@@ -84,16 +84,38 @@ curl http://127.0.0.1:3000/health
 
 ### systemd
 
+Сервис запускается от **www-data** и использует **`/usr/bin/node`**. Нужен **Node 20+** в системе (не nvm в `/root`).
+
+Проверка:
+
+```bash
+/usr/bin/node -v   # должно быть v20.x, не v12
+node -v            # у root может быть nvm v20 — для systemd это не считается
+```
+
+Если `/usr/bin/node` старый (v12), один раз поставить Node 20 system-wide:
+
+```bash
+curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+apt-get install -y nodejs
+/usr/bin/node -v
+```
+
+nvm у root для ручных команд и TG mini app **останется**; systemd возьмёт `/usr/bin/node`.
+
 ```bash
 cp /var/www/d-art/agent_system/deploy/d-art-backend.service.example \
    /etc/systemd/system/d-art-backend.service
+
+chown -R www-data:www-data /var/www/d-art/agent_system/backend
+chmod 600 /var/www/d-art/agent_system/backend/.env
 
 systemctl daemon-reload
 systemctl enable --now d-art-backend
 systemctl status d-art-backend
 ```
 
-Пути в service-файле уже: `/var/www/d-art/agent_system/backend`.
+Пути в service-файле: `/var/www/d-art/agent_system/backend`.
 
 ### nginx (d-art.space)
 
@@ -168,5 +190,7 @@ bash scripts/server-update.sh
 |---------|----------------|
 | CORS error в браузере | `prostranstvo.pw` в `CORS_ORIGIN` |
 | 502 на /api/chat | `systemctl status d-art-backend`, порт 3000 |
+| `SyntaxError: Unexpected token '.'` | `/usr/bin/node -v` — нужен v20+, не v12 |
+| `status=203/EXEC` | путь к node в `/root/.nvm` — поставить Node 20 в `/usr/bin` |
 | Агент не знает тарифы | `ls clients/prostranstvo/`, restart |
 | Нет TG-уведомлений | `notify.json` или `TELEGRAM_NOTIFY_BY_AGENT`, токен бота |
