@@ -1,4 +1,4 @@
-import { DatabaseSync } from 'node:sqlite';
+import Database from 'better-sqlite3';
 import fs from 'fs';
 import path from 'path';
 import { CONSULTANT_SYSTEM_PROMPT } from './prompts/dartConsultant.js';
@@ -13,7 +13,7 @@ export function openDb(dbPath) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
   // SQLite file DB: not network-exposed; restrict file permissions on the host (e.g. chmod 600) and backups.
-  const db = new DatabaseSync(resolved);
+  const db = new Database(resolved);
   db.exec('PRAGMA journal_mode = WAL;');
 
   db.exec(`

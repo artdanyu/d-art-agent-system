@@ -73,6 +73,8 @@ TELEGRAM_NOTIFY_CHAT_ID=...
 # TELEGRAM_NOTIFY_BY_AGENT={"prostranstvo":"CHAT_ID","default":"589807721"}
 ```
 
+Нужен **Node 20+** (`node -v`). На сервере уже v20 — подходит.
+
 ```bash
 npm install
 node src/index.js
