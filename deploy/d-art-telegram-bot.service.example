@@ -1,0 +1,17 @@
+[Unit]
+Description=D-Art Telegram consultant bot
+After=network.target d-art-backend.service
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/d-art/agent_system/telegram-bot
+Environment=NODE_ENV=production
+EnvironmentFile=/var/www/d-art/agent_system/telegram-bot/.env
+ExecStart=/usr/bin/node src/index.js
+Restart=on-failure
+RestartSec=5
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target

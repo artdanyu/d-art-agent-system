@@ -1,0 +1,17 @@
+[Unit]
+Description=D-Art AI backend (Express)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/d-art/agent_system/backend
+Environment=NODE_ENV=production
+EnvironmentFile=/var/www/d-art/agent_system/backend/.env
+ExecStart=/usr/bin/node src/index.js
+Restart=on-failure
+RestartSec=5
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target

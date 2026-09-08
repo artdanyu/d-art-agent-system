@@ -1,0 +1,37 @@
+Уведомления Telegram для agentId «prostranstvo»
+================================================
+
+Когда приходят уведомления
+--------------------------
+1. Пользователь оставил заявку через форму виджета (имя + контакт).
+2. В чате виджета пользователь написал @username или телефон — бекенд сохраняет лид и шлёт уведомление.
+
+Куда уходит сообщение (приоритет)
+---------------------------------
+1. `TELEGRAM_NOTIFY_BY_AGENT` в `.env`, например:
+   `{"prostranstvo":"123456789","default":"589807721"}`
+2. Файл `notify.json` в этой папке (на сервере):
+   `{"telegramChatId":"123456789"}`
+3. Общий `TELEGRAM_NOTIFY_CHAT_ID` в `.env` — если пункты 1–2 не заданы.
+
+Как узнать chat_id
+-------------------
+1. Запустить на сервере `agent_system/notify-id-helper` (см. README.txt там).
+2. Написать /start боту уведомлений (тот же `TELEGRAM_NOTIFY_BOT_TOKEN`).
+3. Скопировать числовой id в `notify.json`:
+
+   cp notify.json.example notify.json
+   # отредактировать telegramChatId
+
+Рекомендация для Пространства
+-----------------------------
+- Отдельный chat_id для заявок с prostranstvo.pw — в `notify.json` этой папки.
+- Или добавить `"prostranstvo":"ВАШ_ID"` в `TELEGRAM_NOTIFY_BY_AGENT`.
+- Без настройки заявки с prostranstvo.pw попадут в общий `TELEGRAM_NOTIFY_CHAT_ID`.
+
+Формат сообщения в Telegram
+----------------------------
+«📬 Заявка с сайта» или «💬 Контакт из чата» + строка `Сайт / агент: prostranstvo`.
+
+После изменения notify.json или clients — перезапуск:
+  sudo systemctl restart d-art-backend

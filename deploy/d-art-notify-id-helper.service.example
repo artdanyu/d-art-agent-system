@@ -1,0 +1,18 @@
+[Unit]
+Description=D-Art Telegram: показ chat_id для notify (тот же токен, что у бекенда)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/d-art/agent_system/notify-id-helper
+Environment=NODE_ENV=production
+# Токен TELEGRAM_NOTIFY_BOT_TOKEN в этом файле:
+EnvironmentFile=/var/www/d-art/agent_system/backend/.env
+ExecStart=/usr/bin/node index.js
+Restart=on-failure
+RestartSec=5
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target
